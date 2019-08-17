@@ -10,6 +10,7 @@ socket.on('newUser', (user) => {
 document.querySelector('#msg-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const text = e.target.elements.message.value;
+    e.target.elements.message.value = '';
     const msg = `<b>${userID}:</b> ${text}`;
     socket.emit('send', msg);
 });
