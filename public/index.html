@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>chat.io</title>
+        <meta name="description" content="real time chat application built using socket.io">
+    </head>
+    <body>
+        <h1>Chat App</h1>
+        <h1 id="user"></h1>
+
+        <form id="msg-form">
+            <input type="text" name="message">
+            <button>send</button>
+        </form>
+        
+        <div id="conversation">
+        </div>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="./js/chat.js"></script>
+    </body>
+</html>
