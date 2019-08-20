@@ -22,8 +22,15 @@ io.on('connection', (socket) => {
 
     socket.broadcast.emit('notify', `${userID} has joined the chat`, true);
 
-    socket.on('send', (msg) => {
-        io.emit('receive', msg);
+    socket.on('send', (msg, callback) => {
+        io.emit('message', msg);
+        callback();
+    });
+
+    socket.on('shareLocation', ({ latitude, longitude }) => {
+        io.emit('location', {
+            url: `https://www.google.com/maps?q=${latitude},${longitude}`
+        });
     });
 
     socket.on('disconnect', () => {
