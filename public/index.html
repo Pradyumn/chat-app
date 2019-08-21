@@ -22,15 +22,15 @@
         </form>
         
         <script id="message-template", type="text/html">
-            <div><p>{{message}}</p></div>
+            <div><p>{{createdAt}} - {{message}}</p></div>
         </script>
 
         <script id="location-template", type="text/html">
-            <div><p><a href="{{url}}", target="_blank">My Location</a></p></div>
+            <div><p>{{createdAt}} - <a href="{{url}}", target="_blank">My Location</a></p></div>
         </script>
 
         <script id="notification-template", type="text/html">
-            <div><p><a href="{{url}}", target="_blank">My Location</a></p></div>
+            <div><p>{{createdAt}} - <a href="{{url}}", target="_blank">My Location</a></p></div>
         </script>
 
         <script src="/socket.io/socket.io.js"></script>

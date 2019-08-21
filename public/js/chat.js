@@ -12,21 +12,18 @@ const $messages = document.querySelector('#messages');
 const messageTemplate = document.querySelector('#message-template').innerHTML;
 const locationTemplate = document.querySelector('#location-template').innerHTML;
 
-socket.on('newUser', (user) => {
-    userID = user;
-    document.querySelector('#user').textContent = userID;
-});
-
-socket.on('message', (message) => {
+socket.on('message', (msg) => {
     const html = Mustache.render(messageTemplate, {
-        message
+        message: msg.text,
+        createdAt: moment(msg.createdAt).format('h:m a')
     });
     $messages.insertAdjacentHTML('beforeend', html);
 });
 
-socket.on('location', (url) => {
+socket.on('location', (msg) => {
     const html = Mustache.render(locationTemplate, {
-        url
+        url: msg.url,
+        createdAt: moment(msg.createdAt).format('h:m a')
     });
 
     $messages.insertAdjacentHTML('beforeend', html);
@@ -47,8 +44,6 @@ $messageForm.addEventListener('submit', (e) => {
         if(error) {
             return console.log(error);
         }
-
-        console.log('message sent');
     });
 });
 

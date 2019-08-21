@@ -4,6 +4,8 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 
+const { generateMessage, generateLocation } = require('./utils/messages');
+
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
@@ -13,29 +15,19 @@ const publicDirPath = path.join(__dirname, '../public');
 
 app.use(express.static(publicDirPath));
 
-let count = 1;
-
 io.on('connection', (socket) => {
-    const userID = `user#${count}`;
-    socket.emit('newUser', userID)
-    count++;
-
-    socket.broadcast.emit('notify', `${userID} has joined the chat`, true);
-
     socket.on('send', (msg, callback) => {
-        io.emit('message', msg);
+        io.emit('message', generateMessage(msg));
         callback();
     });
 
     socket.on('shareLocation', ({ latitude, longitude }) => {
-        console.log(longitude, latitude)
-        const url = `https://www.google.com/maps?q=${latitude},${longitude}`
-        io.emit('location', url);
+        io.emit('location', generateLocation(latitude, longitude));
     });
 
-    socket.on('disconnect', () => {
-        io.emit('notify', `${userID} has left the chat`, false)
-    });
+    // socket.on('disconnect', () => {
+    //     io.emit('notify', `${userID} has left the chat`, false)
+    // });
 });
 
 server.listen(port, () => {
