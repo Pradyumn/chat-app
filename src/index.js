@@ -28,9 +28,9 @@ io.on('connection', (socket) => {
     });
 
     socket.on('shareLocation', ({ latitude, longitude }) => {
-        io.emit('location', {
-            url: `https://www.google.com/maps?q=${latitude},${longitude}`
-        });
+        console.log(longitude, latitude)
+        const url = `https://www.google.com/maps?q=${latitude},${longitude}`
+        io.emit('location', url);
     });
 
     socket.on('disconnect', () => {

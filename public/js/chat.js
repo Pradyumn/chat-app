@@ -29,7 +29,6 @@ socket.on('location', (url) => {
         url
     });
 
-
     $messages.insertAdjacentHTML('beforeend', html);
 });
 
@@ -55,7 +54,6 @@ $messageForm.addEventListener('submit', (e) => {
 
 $locationBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log("hello geo");
     if(!navigator.geolocation) {
         return alert('Geolocation API not found');
     }
