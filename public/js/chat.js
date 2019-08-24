@@ -1,7 +1,6 @@
 const socket = io();
 
-let userID;
-
+// Elements
 const $messageForm = document.querySelector('#msg-form');
 const $messageFormInput = $messageForm.querySelector('input');
 const $messageFormBtn = $messageForm.querySelector('button');
@@ -11,11 +10,15 @@ const $messages = document.querySelector('#messages');
 // Templates
 const messageTemplate = document.querySelector('#message-template').innerHTML;
 const locationTemplate = document.querySelector('#location-template').innerHTML;
+const notificationTemplate = document.querySelector('#notification-template').innerHTML;
+
+// Options
+const {username, room} = Qs.parse(location.search, { ignoreQueryPrefix: true })
 
 socket.on('message', (msg) => {
     const html = Mustache.render(messageTemplate, {
         message: msg.text,
-        createdAt: moment(msg.createdAt).format('h:m a')
+        createdAt: moment(msg.createdAt).format('h:mm a')
     });
     $messages.insertAdjacentHTML('beforeend', html);
 });
@@ -23,7 +26,17 @@ socket.on('message', (msg) => {
 socket.on('location', (msg) => {
     const html = Mustache.render(locationTemplate, {
         url: msg.url,
-        createdAt: moment(msg.createdAt).format('h:m a')
+        createdAt: moment(msg.createdAt).format('h:mm a')
+    });
+
+    $messages.insertAdjacentHTML('beforeend', html);
+});
+
+socket.on('notify', (msg) => {
+    const html = Mustache.render(notificationTemplate, {
+        message: msg.text,
+        color: msg.color,
+        createdAt: moment(msg.createdAt).format('h:mm a')
     });
 
     $messages.insertAdjacentHTML('beforeend', html);
@@ -59,4 +72,10 @@ $locationBtn.addEventListener('click', (e) => {
             longitude: position.coords.longitude
        });
     });    
+});
+
+socket.emit('join', { username, room }, (error) => {
+    if(error) {
+        return alert(error);
+    }
 });

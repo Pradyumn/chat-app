@@ -12,7 +12,22 @@ const generateLocation = (latitude, longitude) => {
     }
 }
 
+const generateNotification = (username, active) => {
+    if(active) {
+        return {
+            text:  `${username} joined the chat`,
+            color: '#02db02'
+        }
+    }
+
+    return {
+        text: `${username} left the chat`,
+        color: '#db021b'
+    }
+}
+
 module.exports = {
     generateMessage,
-    generateLocation
+    generateLocation,
+    generateNotification
 }

@@ -4,7 +4,11 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 
-const { generateMessage, generateLocation } = require('./utils/messages');
+const { generateMessage, 
+        generateLocation, 
+        generateNotification } = require('./utils/messages');
+const { addUser, removeUser,
+        getUser, getUsersInRoom} = require('./utils/users');
 
 const app = express();
 const server = http.createServer(app);
@@ -16,18 +20,32 @@ const publicDirPath = path.join(__dirname, '../public');
 app.use(express.static(publicDirPath));
 
 io.on('connection', (socket) => {
+    socket.on('join', (credentials, callback) => {
+        const { error, user } = addUser({ id: socket.id, ...credentials });
+
+        if(error) {
+            return callback(error);
+        }
+
+        socket.join(user.room);
+        socket.broadcast.to(user.room).emit('notify', generateNotification(user.username, true));
+    });
+
     socket.on('send', (msg, callback) => {
-        io.emit('message', generateMessage(msg));
+        io.to(user.room).emit('message', generateMessage(msg));
         callback();
     });
 
     socket.on('shareLocation', ({ latitude, longitude }) => {
-        io.emit('location', generateLocation(latitude, longitude));
+        io.to(user.room).emit('location', generateLocation(latitude, longitude));
     });
 
-    // socket.on('disconnect', () => {
-    //     io.emit('notify', `${userID} has left the chat`, false)
-    // });
+    socket.on('disconnect', () => {
+        const user = removeUser(socket.id);
+        if(user) {
+            return io.to(user.room).emit('notify', generateNotification(user.username));
+        }
+    });
 });
 
 server.listen(port, () => {

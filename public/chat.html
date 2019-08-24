@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>chat.io</title>
+        <meta name="description" content="real time chat application built using socket.io">
+    </head>
+    <body>
+        <h1>Chat App</h1>
+
+        <div id="messages">
+
+        </div>
+
+        <h1 id="user"></h1>
+
+        <form id="msg-form">
+            <input type="text" name="message" autocomplete="off">
+            <button>send</button>
+            <button id="send-location">location</button>
+        </form>
+        
+        <script id="message-template", type="text/html">
+            <div><p>{{createdAt}} - {{message}}</p></div>
+        </script>
+
+        <script id="location-template", type="text/html">
+            <div><p>{{createdAt}} - <a href="{{url}}", target="_blank">My Location</a></p></div>
+        </script>
+
+        <script id="notification-template", type="text/html">
+            <div color="{{color}}"><p>{{createdAt}} - {{message}}</p></div>
+        </script>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="./js/mustache.min.js"></script>
+        <script src="./js/moment.min.js"></script>
+        <script src="./js/qs.min.js"></script>
+        <script src="./js/chat.js"></script>
+    </body>
+</html>
