@@ -32,12 +32,14 @@ io.on('connection', (socket) => {
     });
 
     socket.on('send', (msg, callback) => {
-        io.to(user.room).emit('message', generateMessage(msg));
+        const user = getUser(socket.id);
+        io.to(user.room).emit('message', generateMessage(user.username, msg));
         callback();
     });
 
     socket.on('shareLocation', ({ latitude, longitude }) => {
-        io.to(user.room).emit('location', generateLocation(latitude, longitude));
+        const user = getUser(socket.id);
+        io.to(user.room).emit('location', generateLocation(user.username, latitude, longitude));
     });
 
     socket.on('disconnect', () => {

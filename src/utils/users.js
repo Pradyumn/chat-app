@@ -30,7 +30,7 @@ const removeUser = (id) => {
 }
 
 // find user by id
-const getUser = (id) => users.find((user => user.id === id));
+const getUser = (id) => users.find((user) => user.id === id);
 
 // get users inside a room
 const getUsersInRoom = (room) => users.filter((user) => user.room === room);
